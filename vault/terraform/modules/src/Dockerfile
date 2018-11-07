@@ -1,6 +1,6 @@
 FROM library/vault
 
-RUN apk add python py-pip curl
+RUN apk add python py-pip curl jq bash
 RUN pip install pip --upgrade
 RUN pip install awscli
 
@@ -11,4 +11,4 @@ COPY ./vault.hcl /opt/vault.hcl
 
 EXPOSE 8200
 
-CMD /opt/run.sh
+CMD bash /opt/run.sh

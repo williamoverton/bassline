@@ -21,6 +21,12 @@ resource "aws_elastic_beanstalk_environment" "bl_app_environment" {
     value     = "${aws_iam_instance_profile.bl_vault_iam.name}"
   }
 
+  setting {
+    namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+    name      = "RollingUpdateEnabled"
+    value     = "true"
+  }
+
   # Environment variables
 
   setting {
@@ -39,6 +45,25 @@ resource "aws_elastic_beanstalk_environment" "bl_app_environment" {
     namespace = "aws:elasticbeanstalk:application:environment"
     name      = "VAULT_API_ADDR"
     value     = "http://bl-vault-${var.stack}-${var.aws_region}-${var.namespace}:8200"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:application:environment"
+    name      = "BL_VAULT_CONFIG_S3_BUCKET"
+    value     = "${aws_s3_bucket.bl_vault_container_config_storage.bucket}"
+  }
+
+  # Scaling
+
+  setting {
+    namespace = "aws:autoscaling:asg"
+    name      = "MinSize"
+    value     = "3"
+  }
+  setting {
+    namespace = "aws:autoscaling:asg"
+    name      = "MaxSize"
+    value     = "6"
   }
 
   # Networking
@@ -144,6 +169,7 @@ resource "aws_iam_role_policy" "bl_vault_iam-role" {
     {
       "Action": [
         "dynamodb:*",
+        "s3:*",
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
