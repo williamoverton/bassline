@@ -9,4 +9,6 @@ RUN chmod +x /opt/run.sh
 
 COPY ./vault.hcl /opt/vault.hcl
 
+EXPOSE 8200
+
 CMD /opt/run.sh
