@@ -1,0 +1,339 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.10",
+    "serial": 5,
+    "lineage": "d556aa74-84ab-9caf-b561-6683365842aa",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {},
+            "depends_on": []
+        },
+        {
+            "path": [
+                "root",
+                "bl-vpc"
+            ],
+            "outputs": {},
+            "resources": {
+                "aws_network_acl.bl_main_nacl": {
+                    "type": "aws_network_acl",
+                    "depends_on": [
+                        "aws_vpc.bl_main_vpc"
+                    ],
+                    "primary": {
+                        "id": "acl-06ddfe960c0b9a6dc",
+                        "attributes": {
+                            "egress.#": "1",
+                            "egress.1633246743.action": "allow",
+                            "egress.1633246743.cidr_block": "10.0.0.0/18",
+                            "egress.1633246743.from_port": "443",
+                            "egress.1633246743.icmp_code": "0",
+                            "egress.1633246743.icmp_type": "0",
+                            "egress.1633246743.ipv6_cidr_block": "",
+                            "egress.1633246743.protocol": "6",
+                            "egress.1633246743.rule_no": "200",
+                            "egress.1633246743.to_port": "443",
+                            "id": "acl-06ddfe960c0b9a6dc",
+                            "ingress.#": "1",
+                            "ingress.3459206999.action": "allow",
+                            "ingress.3459206999.cidr_block": "10.0.0.0/18",
+                            "ingress.3459206999.from_port": "80",
+                            "ingress.3459206999.icmp_code": "0",
+                            "ingress.3459206999.icmp_type": "0",
+                            "ingress.3459206999.ipv6_cidr_block": "",
+                            "ingress.3459206999.protocol": "6",
+                            "ingress.3459206999.rule_no": "100",
+                            "ingress.3459206999.to_port": "80",
+                            "subnet_ids.#": "0",
+                            "tags.%": "1",
+                            "tags.Name": "main",
+                            "vpc_id": "vpc-08e450681ece19d42"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_network_acl_rule.bl_nacl_private_s3.2": {
+                    "type": "aws_network_acl_rule",
+                    "depends_on": [
+                        "aws_network_acl.bl_main_nacl",
+                        "data.aws_prefix_list.bl_vpc_endpoint_s3_prefix_list"
+                    ],
+                    "primary": {
+                        "id": "nacl-3177317834",
+                        "attributes": {
+                            "cidr_block": "52.95.148.0/23",
+                            "egress": "false",
+                            "from_port": "443",
+                            "id": "nacl-3177317834",
+                            "ipv6_cidr_block": "",
+                            "network_acl_id": "acl-06ddfe960c0b9a6dc",
+                            "protocol": "tcp",
+                            "rule_action": "allow",
+                            "rule_number": "200",
+                            "to_port": "443"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_security_group.bl_vpc_endpoint_ec2_sg": {
+                    "type": "aws_security_group",
+                    "depends_on": [
+                        "aws_vpc.bl_main_vpc"
+                    ],
+                    "primary": {
+                        "id": "sg-0631553d7865d71d9",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:eu-west-2:993862213747:security-group/sg-0631553d7865d71d9",
+                            "description": "Managed by Terraform",
+                            "egress.#": "1",
+                            "egress.2617001939.cidr_blocks.#": "1",
+                            "egress.2617001939.cidr_blocks.0": "0.0.0.0/0",
+                            "egress.2617001939.description": "",
+                            "egress.2617001939.from_port": "443",
+                            "egress.2617001939.ipv6_cidr_blocks.#": "0",
+                            "egress.2617001939.prefix_list_ids.#": "0",
+                            "egress.2617001939.protocol": "tcp",
+                            "egress.2617001939.security_groups.#": "0",
+                            "egress.2617001939.self": "false",
+                            "egress.2617001939.to_port": "443",
+                            "id": "sg-0631553d7865d71d9",
+                            "ingress.#": "1",
+                            "ingress.2617001939.cidr_blocks.#": "1",
+                            "ingress.2617001939.cidr_blocks.0": "0.0.0.0/0",
+                            "ingress.2617001939.description": "",
+                            "ingress.2617001939.from_port": "443",
+                            "ingress.2617001939.ipv6_cidr_blocks.#": "0",
+                            "ingress.2617001939.prefix_list_ids.#": "0",
+                            "ingress.2617001939.protocol": "tcp",
+                            "ingress.2617001939.security_groups.#": "0",
+                            "ingress.2617001939.self": "false",
+                            "ingress.2617001939.to_port": "443",
+                            "name": "bl_vpc_endpoint_ec2_sg",
+                            "owner_id": "993862213747",
+                            "revoke_rules_on_delete": "false",
+                            "tags.%": "0",
+                            "vpc_id": "vpc-08e450681ece19d42"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000
+                            },
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_security_group.bl_vpc_endpoint_s3_sg": {
+                    "type": "aws_security_group",
+                    "depends_on": [
+                        "aws_vpc.bl_main_vpc"
+                    ],
+                    "primary": {
+                        "id": "sg-05a331a7339ff1367",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:eu-west-2:993862213747:security-group/sg-05a331a7339ff1367",
+                            "description": "Managed by Terraform",
+                            "egress.#": "1",
+                            "egress.2617001939.cidr_blocks.#": "1",
+                            "egress.2617001939.cidr_blocks.0": "0.0.0.0/0",
+                            "egress.2617001939.description": "",
+                            "egress.2617001939.from_port": "443",
+                            "egress.2617001939.ipv6_cidr_blocks.#": "0",
+                            "egress.2617001939.prefix_list_ids.#": "0",
+                            "egress.2617001939.protocol": "tcp",
+                            "egress.2617001939.security_groups.#": "0",
+                            "egress.2617001939.self": "false",
+                            "egress.2617001939.to_port": "443",
+                            "id": "sg-05a331a7339ff1367",
+                            "ingress.#": "1",
+                            "ingress.2617001939.cidr_blocks.#": "1",
+                            "ingress.2617001939.cidr_blocks.0": "0.0.0.0/0",
+                            "ingress.2617001939.description": "",
+                            "ingress.2617001939.from_port": "443",
+                            "ingress.2617001939.ipv6_cidr_blocks.#": "0",
+                            "ingress.2617001939.prefix_list_ids.#": "0",
+                            "ingress.2617001939.protocol": "tcp",
+                            "ingress.2617001939.security_groups.#": "0",
+                            "ingress.2617001939.self": "false",
+                            "ingress.2617001939.to_port": "443",
+                            "name": "bl_vpc_endpoint_s3_sg",
+                            "owner_id": "993862213747",
+                            "revoke_rules_on_delete": "false",
+                            "tags.%": "0",
+                            "vpc_id": "vpc-08e450681ece19d42"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000
+                            },
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_vpc.bl_main_vpc": {
+                    "type": "aws_vpc",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "vpc-08e450681ece19d42",
+                        "attributes": {
+                            "arn": "arn:aws:ec2:eu-west-2:993862213747:vpc/vpc-08e450681ece19d42",
+                            "assign_generated_ipv6_cidr_block": "false",
+                            "cidr_block": "10.0.0.0/16",
+                            "default_network_acl_id": "acl-0a8e8894f85ed5df9",
+                            "default_route_table_id": "rtb-024e00292bb4002a0",
+                            "default_security_group_id": "sg-0a639611da50bc3c7",
+                            "dhcp_options_id": "dopt-a9761dc1",
+                            "enable_dns_hostnames": "false",
+                            "enable_dns_support": "true",
+                            "id": "vpc-08e450681ece19d42",
+                            "instance_tenancy": "default",
+                            "main_route_table_id": "rtb-024e00292bb4002a0",
+                            "tags.%": "1",
+                            "tags.Name": "bl-main-vpc"
+                        },
+                        "meta": {
+                            "schema_version": "1"
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_vpc_endpoint.bl_vpc_endpoint_dynamodb": {
+                    "type": "aws_vpc_endpoint",
+                    "depends_on": [
+                        "aws_vpc.bl_main_vpc"
+                    ],
+                    "primary": {
+                        "id": "vpce-0779f7722eacc1fab",
+                        "attributes": {
+                            "cidr_blocks.#": "1",
+                            "cidr_blocks.0": "52.94.15.0/24",
+                            "dns_entry.#": "0",
+                            "id": "vpce-0779f7722eacc1fab",
+                            "network_interface_ids.#": "0",
+                            "policy": "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}",
+                            "prefix_list_id": "pl-b3a742da",
+                            "private_dns_enabled": "false",
+                            "route_table_ids.#": "0",
+                            "security_group_ids.#": "0",
+                            "service_name": "com.amazonaws.eu-west-2.dynamodb",
+                            "state": "available",
+                            "subnet_ids.#": "0",
+                            "vpc_endpoint_type": "Gateway",
+                            "vpc_id": "vpc-08e450681ece19d42"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000,
+                                "update": 600000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "aws_vpc_endpoint.bl_vpc_endpoint_s3": {
+                    "type": "aws_vpc_endpoint",
+                    "depends_on": [
+                        "aws_vpc.bl_main_vpc"
+                    ],
+                    "primary": {
+                        "id": "vpce-0883b0d381dce59ea",
+                        "attributes": {
+                            "cidr_blocks.#": "3",
+                            "cidr_blocks.0": "52.95.150.0/24",
+                            "cidr_blocks.1": "52.92.88.0/22",
+                            "cidr_blocks.2": "52.95.148.0/23",
+                            "dns_entry.#": "0",
+                            "id": "vpce-0883b0d381dce59ea",
+                            "network_interface_ids.#": "0",
+                            "policy": "{\"Statement\":[{\"Action\":\"*\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"*\"}],\"Version\":\"2008-10-17\"}",
+                            "prefix_list_id": "pl-7ca54015",
+                            "private_dns_enabled": "false",
+                            "route_table_ids.#": "0",
+                            "security_group_ids.#": "0",
+                            "service_name": "com.amazonaws.eu-west-2.s3",
+                            "state": "available",
+                            "subnet_ids.#": "0",
+                            "vpc_endpoint_type": "Gateway",
+                            "vpc_id": "vpc-08e450681ece19d42"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 600000000000,
+                                "delete": 600000000000,
+                                "update": 600000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "data.aws_prefix_list.bl_vpc_endpoint_dynamodb_prefix_list": {
+                    "type": "aws_prefix_list",
+                    "depends_on": [
+                        "aws_vpc_endpoint.bl_vpc_endpoint_dynamodb"
+                    ],
+                    "primary": {
+                        "id": "pl-b3a742da",
+                        "attributes": {
+                            "cidr_blocks.#": "1",
+                            "cidr_blocks.0": "52.94.15.0/24",
+                            "id": "pl-b3a742da",
+                            "name": "com.amazonaws.eu-west-2.dynamodb",
+                            "prefix_list_id": "pl-b3a742da"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                },
+                "data.aws_prefix_list.bl_vpc_endpoint_s3_prefix_list": {
+                    "type": "aws_prefix_list",
+                    "depends_on": [
+                        "aws_vpc_endpoint.bl_vpc_endpoint_s3"
+                    ],
+                    "primary": {
+                        "id": "pl-7ca54015",
+                        "attributes": {
+                            "cidr_blocks.#": "3",
+                            "cidr_blocks.0": "52.95.150.0/24",
+                            "cidr_blocks.1": "52.92.88.0/22",
+                            "cidr_blocks.2": "52.95.148.0/23",
+                            "id": "pl-7ca54015",
+                            "name": "com.amazonaws.eu-west-2.s3",
+                            "prefix_list_id": "pl-7ca54015"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.aws"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}

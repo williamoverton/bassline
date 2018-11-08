@@ -1,4 +1,4 @@
-aws_region="eu-west-1"
+aws_region="eu-west-2"
 namespace="sandbox"
 stack="dev"
 aws_elastic_stack_version="64bit Amazon Linux 2018.03 v2.12.4 running Docker 18.06.1-ce"
