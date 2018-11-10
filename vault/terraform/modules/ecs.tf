@@ -24,7 +24,15 @@ resource "aws_ecs_task_definition" "app" {
         "containerPort": 8200,
         "hostPort": 8200
       }
-    ]
+    ],
+    "logConfiguration": { 
+      "logDriver": "awslogs",
+      "options": { 
+        "awslogs-group" : "bl-vault-ecs-cluster-${var.stack}-${var.namespace}",
+        "awslogs-region": "${var.aws_region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    }
   }
 ]
 DEFINITION
