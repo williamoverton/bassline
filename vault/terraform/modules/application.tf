@@ -1,4 +1,15 @@
-resource "aws_elastic_beanstalk_application" "bl-app" {
+# get private VPC
+
+data "aws_vpc" "bl_private_vpc" {
+  id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+}
+
+data "aws_subnet_ids" "bl_private_subnets" {
+  vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+}
+
+# Build app
+resource "aws_elastic_beanstalk_application" "bl_app" {
   name = "bl-vault-${var.stack}-${var.aws_region}-${var.namespace}"
 }
 
@@ -7,6 +18,18 @@ resource "aws_elastic_beanstalk_environment" "bl_app_environment" {
   application         = "bl-vault-${var.stack}-${var.aws_region}-${var.namespace}"
   solution_stack_name = "${var.aws_elastic_stack_version}"
   tier                = "WebServer"
+
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "VPCId"
+    value     = "${data.aws_vpc.bl_private_vpc.id}"
+  }
+
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "Subnets"
+    value     = "${join(",", data.aws_subnet_ids.bl_private_subnets.ids)}"
+  }
 
   setting {
     namespace = "aws:autoscaling:launchconfiguration"

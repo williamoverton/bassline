@@ -6,9 +6,10 @@ terraform {
   }
 }
 
-module "bl-vpc" {
+module "bl_vpc" {
   source  = "../../modules"
 
   aws_region = "${var.aws_region}"
   stack = "${var.stack}"
+  account_id = "${var.account_id}"
 }
