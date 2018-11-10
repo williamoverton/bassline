@@ -1,9 +1,17 @@
-module "bl-vault" {
+terraform {
+  backend "s3" {
+    bucket = "bl-terrafrom-remote-state"
+    key    = "bl/vault"
+    region = "eu-west-2"
+  }
+}
+
+module "bl_vault" {
   source  = "../../modules"
 
   aws_region = "${var.aws_region}"
   namespace = "${var.namespace}"
   stack = "${var.stack}"
-  aws_elastic_stack_version = "${var.aws_elastic_stack_version}"
-  instance_type = "${var.instance_type}"
+  cpu = "${var.cpu}"
+  memory = "${var.memory}"
 }

@@ -118,9 +118,19 @@ resource "aws_network_acl" "bl_public_main_nacl" {
   }
 
   # Outside Inputs
+
   ingress {
     protocol   = "tcp"
     rule_no    = 200
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 22
+    to_port    = 22
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 300
     action     = "allow"
     cidr_block = "0.0.0.0/0"
     from_port  = 443
@@ -129,7 +139,7 @@ resource "aws_network_acl" "bl_public_main_nacl" {
 
   ingress {
     protocol   = "tcp"
-    rule_no    = 300
+    rule_no    = 400
     action     = "allow"
     cidr_block = "0.0.0.0/0"
     from_port  = 80
@@ -138,11 +148,11 @@ resource "aws_network_acl" "bl_public_main_nacl" {
 
   ingress {
     protocol   = "tcp"
-    rule_no    = 400
+    rule_no    = 500
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 22
-    to_port    = 22
+    from_port  = 8200
+    to_port    = 8200
   }
 
   tags {

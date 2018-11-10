@@ -11,8 +11,7 @@ output "account_id" {
 }
 
 output "private_vpc_id" {
-  # value = "${aws_vpc.bl_private_main_vpc.id}"
-  value = "1"
+  value = "${aws_vpc.bl_private_main_vpc.id}"
 }
 
 output "public_vpc_id" {
