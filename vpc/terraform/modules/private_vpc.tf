@@ -9,7 +9,7 @@ resource "aws_instance" "debug_test_2" {
   key_name = "biff"
 
   tags {
-    Name = "HelloWorld"
+    Name = "DEBUG PRIVATE"
   }
 }
 
@@ -42,7 +42,6 @@ resource "aws_subnet" "bl_private_main_vpc_subnet" {
 
 # Route table for subnets
 resource "aws_route_table" "bl_private_main_route_table" {
-  # count  = "${length(data.aws_availability_zones.bl_private_az.names)}"
   vpc_id = "${aws_vpc.bl_private_main_vpc.id}"
 
   route {
@@ -71,12 +70,12 @@ resource "aws_network_acl" "bl_private_main_nacl" {
 
   # Output to public vpc
   egress {
-    protocol   = "all"
+    protocol   = "tcp"
     rule_no    = 100
     action     = "allow"
     cidr_block = "${aws_vpc.bl_public_main_vpc.cidr_block}"
     from_port  = 0
-    to_port    = 0
+    to_port    = 65525
   }
 
   # Input from public vpc
@@ -85,26 +84,8 @@ resource "aws_network_acl" "bl_private_main_nacl" {
     rule_no    = 100
     action     = "allow"
     cidr_block = "${aws_vpc.bl_public_main_vpc.cidr_block}"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 2100
-    action     = "allow"
-    cidr_block = "${aws_vpc.bl_public_main_vpc.cidr_block}"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 300
-    action     = "allow"
-    cidr_block = "${aws_vpc.bl_public_main_vpc.cidr_block}"
-    from_port  = 22
-    to_port    = 22
+    from_port  = 0
+    to_port    = 65525
   }
 
   tags {

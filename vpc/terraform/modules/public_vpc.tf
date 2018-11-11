@@ -9,7 +9,7 @@ resource "aws_instance" "debug_test_1" {
   key_name = "biff"
 
   tags {
-    Name = "HelloWorld"
+    Name = "DEBUG PUBLIC"
   }
 }
 
@@ -19,6 +19,7 @@ resource "aws_instance" "debug_test_1" {
 resource "aws_vpc" "bl_public_main_vpc" {
   cidr_block = "10.2.0.0/16"
 
+  enable_dns_support = true
   enable_dns_hostnames = true
 
   tags {
@@ -46,6 +47,10 @@ resource "aws_subnet" "bl_public_main_subnet" {
 # Internet Gateway
 resource "aws_internet_gateway" "bl_public_main_gw" {
   vpc_id = "${aws_vpc.bl_public_main_vpc.id}"
+
+  tags {
+    Name = "bl-public-main-internet-gateway"
+  }
 }
 
 resource "aws_route_table" "bl_public_main_route_table" {
@@ -97,7 +102,7 @@ resource "aws_network_acl" "bl_public_main_nacl" {
 
   subnet_ids   = ["${aws_subnet.bl_public_main_subnet.*.id}"]
 
-  # Allow all out
+  # Allow all in and out
   egress {
     protocol   = "all"
     rule_no    = 100
@@ -107,52 +112,13 @@ resource "aws_network_acl" "bl_public_main_nacl" {
     to_port    = 0
   }
 
-  # Input from private vpc
   ingress {
     protocol   = "all"
     rule_no    = 100
     action     = "allow"
-    cidr_block = "${aws_vpc.bl_private_main_vpc.cidr_block}"
+    cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
-  }
-
-  # Outside Inputs
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 22
-    to_port    = 22
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 300
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 400
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 500
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 8200
-    to_port    = 8200
   }
 
   tags {
