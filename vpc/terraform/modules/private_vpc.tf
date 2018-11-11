@@ -2,7 +2,7 @@
 
 resource "aws_instance" "debug_test_2" {
   ami           = "ami-017b0e29fac27906b"
-  instance_type = "t2.micro"
+  instance_type = "t3.nano"
 
   subnet_id = "${aws_subnet.bl_private_main_vpc_subnet.0.id}"
 

@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "bl-terrafrom-remote-state"
-    key    = "bl/vault"
+    key    = "bl/proxy"
     region = "eu-west-2"
   }
 }
