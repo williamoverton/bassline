@@ -3,7 +3,7 @@ data "aws_ami" "amazon_linux_ecs" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-*-amazon-ecs-optimized"]
+    values = ["amzn2-ami-ecs-hvm-*-x86_64-ebs"]
   }
 
   filter {
@@ -35,7 +35,7 @@ resource "aws_launch_configuration" "bl_ecs_instances_launch_config" {
   security_groups = ["${aws_security_group.bl_ecs_instances_sg.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.bl_ecs_instances_instance_profile.name}"
 
-  # key_name = "${aws_key_pair.alex.key_name}"
+  key_name = "biff"
 
   associate_public_ip_address = false
 

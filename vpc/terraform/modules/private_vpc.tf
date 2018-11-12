@@ -148,7 +148,22 @@ data "aws_prefix_list" "bl_private_vpc_endpoint_dynamodb_prefix_list" {
   prefix_list_id = "${aws_vpc_endpoint.bl_private_vpc_endpoint_dynamodb.prefix_list_id}"
 }
 
-resource "aws_network_acl_rule" "bl_private_nacl_private_s3" {
+resource "aws_network_acl_rule" "bl_private_nacl_private_s3_out" {
+  # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks)}"
+  #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
+  count          = 3
+
+  network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
+  rule_number    = "40${count.index}"
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "${data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks[count.index]}"
+  from_port      = 443
+  to_port        = 443
+}
+
+resource "aws_network_acl_rule" "bl_private_nacl_private_s3_in" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
   count          = 3
@@ -159,11 +174,11 @@ resource "aws_network_acl_rule" "bl_private_nacl_private_s3" {
   protocol       = "tcp"
   rule_action    = "allow"
   cidr_block     = "${data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks[count.index]}"
-  from_port      = 443
-  to_port        = 443
+  from_port      = 1024
+  to_port        = 65524
 }
 
-resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb" {
+resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb_in" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
   count          = 1
@@ -174,6 +189,31 @@ resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb" {
   protocol       = "tcp"
   rule_action    = "allow"
   cidr_block     = "${data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks[count.index]}"
+  from_port      = 1024
+  to_port        = 65525
+}
+
+resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb_out" {
+  # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks)}"
+  #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
+  count          = 1
+
+  network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
+  rule_number    = "50${count.index}"
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "${data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks[count.index]}"
   from_port      = 443
   to_port        = 443
+}
+
+resource "aws_vpc_endpoint_route_table_association" "bl_private_vpc_endpoint_route_s3" {
+  route_table_id  = "${aws_route_table.bl_private_main_route_table.id}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.bl_private_vpc_endpoint_s3.id}"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "bl_private_vpc_endpoint_route_dynamodb" {
+  route_table_id  = "${aws_route_table.bl_private_main_route_table.id}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.bl_private_vpc_endpoint_dynamodb.id}"
 }

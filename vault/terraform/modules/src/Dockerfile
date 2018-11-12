@@ -11,4 +11,6 @@ COPY ./vault.hcl /opt/vault.hcl
 
 EXPOSE 8200
 
+RUN echo $RANDOM > /tmp/ahhhh # DEBUG AHHH
+
 CMD bash /opt/run.sh

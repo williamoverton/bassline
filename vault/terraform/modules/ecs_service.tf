@@ -10,6 +10,7 @@ resource "aws_ecs_task_definition" "app" {
   memory                   = "${var.memory}"
 
   execution_role_arn       = "${aws_iam_role.bl_vault_ecs_instance_role.arn}"
+  task_role_arn            = "${aws_iam_role.bl_vault_ecs_instance_role.arn}"
 
   container_definitions = <<DEFINITION
 [
@@ -17,7 +18,7 @@ resource "aws_ecs_task_definition" "app" {
     "cpu": ${var.cpu},
     "image": "${aws_ecr_repository.bl_vault_ecr_repo.repository_url}:latest",
     "memory": ${var.memory},
-    "name": "bl-vault-${var.stack}-${var.namespace}",
+    "name": "bl-${var.app_name}-${var.stack}-${var.namespace}",
     "networkMode": "awsvpc",
     "portMappings": [
       {
@@ -28,11 +29,29 @@ resource "aws_ecs_task_definition" "app" {
     "logConfiguration": { 
       "logDriver": "awslogs",
       "options": { 
-        "awslogs-group" : "bl-vault-ecs-cluster-${var.stack}-${var.namespace}",
+        "awslogs-group" : "${aws_cloudwatch_log_group.bl_cloudwatch_log_group.name}",
         "awslogs-region": "${var.aws_region}",
         "awslogs-stream-prefix": "ecs"
       }
-    }
+    },
+    "environment": [
+      {
+        "name": "AWS_REGION", 
+        "value": "${var.aws_region}"
+      },
+      {
+        "name": "AWS_DYNAMODB_TABLE", 
+        "value": "bl-${var.app_name}-${var.stack}-${var.namespace}"
+      },
+      {
+        "name": "VAULT_API_ADDR",
+        "value": "http://${aws_alb.bl_vault_ecs_private_load_balancer.dns_name}:8200"
+      },
+      {
+        "name": "BL_VAULT_CONFIG_S3_BUCKET", 
+        "value": "${aws_s3_bucket.bl_vault_container_config_storage.bucket}"
+      }
+    ]
   }
 ]
 DEFINITION
@@ -74,6 +93,13 @@ resource "aws_security_group" "bl_ecs_task_sg" {
     from_port       = "8200"
     to_port         = "8200"
     security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "8200"
+    to_port         = "8200"
+    cidr_blocks     = ["0.0.0.0/0"]
   }
 
   egress {
