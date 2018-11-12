@@ -57,7 +57,7 @@ resource "aws_alb_target_group" "bl_vault_ecs_target_group" {
         unhealthy_threshold = "2"
         interval            = "30"
         matcher             = "200"
-        path                = "/"
+        path                = "/v1/sys/seal-status"
         port                = "traffic-port"
         protocol            = "HTTP"
         timeout             = "5"
