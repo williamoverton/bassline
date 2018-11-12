@@ -3,3 +3,4 @@ variable "stack" {}
 variable "namespace" {}
 variable "cpu" {}
 variable "memory" {}
+variable "ecs_instance_type" {}

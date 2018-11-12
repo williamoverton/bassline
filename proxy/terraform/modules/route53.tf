@@ -8,7 +8,7 @@ data "aws_route53_zone" "bl_public_vpc_dns_zone" {
 
 resource "aws_route53_record" "bl_internal_public_vpc_dns" {
   zone_id = "${data.aws_route53_zone.bl_private_vpc_dns_zone.zone_id}"
-  name    = "proxy.${data.aws_route53_zone.bl_public_vpc_dns_zone.name}"
+  name    = "proxy-${var.stack}-${var.namespace}.${data.aws_route53_zone.bl_public_vpc_dns_zone.name}"
   type    = "A"
 
   alias {
@@ -20,7 +20,7 @@ resource "aws_route53_record" "bl_internal_public_vpc_dns" {
 
 resource "aws_route53_record" "bl_internal_private_vpc_dns" {
   zone_id = "${data.aws_route53_zone.bl_public_vpc_dns_zone.zone_id}"
-  name    = "proxy.${data.aws_route53_zone.bl_private_vpc_dns_zone.name}"
+  name    = "proxy-${var.stack}-${var.namespace}.${data.aws_route53_zone.bl_private_vpc_dns_zone.name}"
   type    = "A"
 
   alias {

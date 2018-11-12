@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "bl_vault_ecs_cluster" {
 resource "aws_ecs_task_definition" "app" {
   family                   = "bl-vault-${var.stack}-${var.namespace}"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
   cpu                      = "${var.cpu}"
   memory                   = "${var.memory}"
 
@@ -45,7 +45,7 @@ resource "aws_ecs_service" "bl_vault_ecs_service" {
   cluster         = "${aws_ecs_cluster.bl_vault_ecs_cluster.id}"
   task_definition = "${aws_ecs_task_definition.app.arn}"
   desired_count   = "3"
-  launch_type     = "FARGATE"
+  launch_type     = "EC2"
 
   network_configuration {
     security_groups = ["${aws_security_group.bl_ecs_task_sg.id}"]

@@ -25,8 +25,8 @@ resource "aws_ecs_task_definition" "app" {
     "networkMode": "awsvpc",
     "portMappings": [
       {
-        "containerPort": 9000,
-        "hostPort": 9000
+        "containerPort": ${var.app_port},
+        "hostPort": ${var.app_port}
       }
     ]
   }
@@ -52,7 +52,7 @@ resource "aws_ecs_service" "bl_ecs_service" {
   load_balancer {
     target_group_arn = "${aws_lb_target_group.bl_ecs_target_group.id}"
     container_name   = "bl-${var.app_name}-${var.stack}-${var.namespace}"
-    container_port   = "9000"
+    container_port   = "${var.app_port}"
   }
 
   depends_on = [
@@ -68,8 +68,8 @@ resource "aws_security_group" "bl_ecs_task_sg" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = "9000"
-    to_port         = "9000"
+    from_port       = "${var.app_port}"
+    to_port         = "${var.app_port}"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
