@@ -12,7 +12,7 @@ resource "aws_iam_role_policy" "bl_ecs_instance_role_policy" {
 resource "aws_iam_instance_profile" "bl_ecs_instances_instance_profile" {
   name = "bl-${var.app_name}-ecs-instance-profile-${var.stack}-${var.namespace}"
   path = "/"
-  roles = ["${aws_iam_role.bl_ecs_host_role.name}"]
+  role = "${aws_iam_role.bl_ecs_host_role.name}"
 }
 
 data "aws_iam_policy_document" "bl_ecs_instance_assume_role_policy" {

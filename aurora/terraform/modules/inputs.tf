@@ -15,6 +15,10 @@ variable "backups_days" {
   default = 1
 }
 
+variable "instance_count" {
+  default = 1
+}
+
 data "terraform_remote_state" "bl_vpc_config" {
   backend = "s3"
   config {

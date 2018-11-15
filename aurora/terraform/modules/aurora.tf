@@ -6,7 +6,7 @@ data "aws_subnet_ids" "bl_private_subnets" {
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {
-  count              = 2
+  count              = "${var.instance_count}"
   identifier         = "bl-${var.app_name}-${var.stack}-${var.namespace}-${count.index}"
   cluster_identifier = "${aws_rds_cluster.bl_aurora_cluster.id}"
   instance_class     = "db.r3.large"
@@ -24,7 +24,7 @@ resource "aws_rds_cluster" "bl_aurora_cluster" {
   port                          = "${var.app_port}"
 
   backup_retention_period       = "${var.backups_days}"
-  final_snapshot_identifier     = "bl-${var.app_name}-bl-${var.stack}-${var.namespace}-${uuid()}"
+  skip_final_snapshot           = true
 
   vpc_security_group_ids        = [
       "${aws_security_group.bl_rds_sg.id}"
@@ -37,8 +37,8 @@ resource "aws_rds_cluster" "bl_aurora_cluster" {
     create_before_destroy = true
   }
 
-  master_username    = "dsfgsdfgsdfg"
-  master_password    = "sdfgsdfgsdfgsdfgsdfgsdrtytyuj453453535345"
+  master_username    = "bladmin"
+  master_password    = "${aws_secretsmanager_secret_version.bl_aurora_password_secret.secret_string}"
 }
 
 resource "aws_db_subnet_group" "bl_aurora_subnet" {
