@@ -13,7 +13,7 @@
 - Either create an S3 bucket for terraform state
 - Automatically create a bucket by running the setup script: `./setup/setup_terraform.sh`
 
-## How do I dpeloy everything?
+## How do I deploy everything?
 1. Authenticate with AWS (this will differ depending on your environment. run `aws configure` for basic key based auth
 2. Run the `deploy-${env}.sh` script, e.g. `./deploy-dev.sh`
 
