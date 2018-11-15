@@ -19,6 +19,14 @@ variable "autoscale_desired" {
   default = 3
 }
 
+variable "dynamodb_read_capacity" {
+  default = 5
+}
+
+variable "dynamodb_write_capacity" {
+  default = 5
+}
+
 data "terraform_remote_state" "bl_vpc_config" {
   backend = "s3"
   config {
