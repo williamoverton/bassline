@@ -5,6 +5,14 @@ data "aws_subnet_ids" "bl_private_subnets" {
   vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
 }
 
+data "aws_vpc" "bl_private_main_vpc" {
+  id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+}
+
+data "aws_vpc" "bl_public_main_vpc" {
+  id = "${data.terraform_remote_state.bl_vpc_config.public_vpc_id}"
+}
+
 resource "aws_rds_cluster_instance" "cluster_instances" {
   count              = "${var.instance_count}"
   identifier         = "bl-${var.app_name}-${var.stack}-${var.namespace}-${count.index}"
@@ -19,16 +27,12 @@ resource "aws_rds_cluster" "bl_aurora_cluster" {
   database_name      = "${var.app_name}${var.stack}${var.namespace}"
   apply_immediately  = true
 
-  db_subnet_group_name = "${aws_db_subnet_group.bl_aurora_subnet.name}"
-
+  db_subnet_group_name          = "${aws_db_subnet_group.bl_aurora_subnet.name}"
   port                          = "${var.app_port}"
+  vpc_security_group_ids        = ["${aws_security_group.bl_rds_sg.id}"]
 
   backup_retention_period       = "${var.backups_days}"
   skip_final_snapshot           = true
-
-  vpc_security_group_ids        = [
-      "${aws_security_group.bl_rds_sg.id}"
-  ]
 
   preferred_backup_window       = "09:00-10:00"
   preferred_maintenance_window  = "wed:10:00-wed:11:00"
@@ -57,13 +61,13 @@ resource "aws_security_group" "bl_rds_sg" {
     protocol        = "tcp"
     from_port       = "${var.app_port}"
     to_port         = "${var.app_port}"
-    cidr_blocks     = ["0.0.0.0/0"]
+    cidr_blocks     = ["${data.aws_vpc.bl_private_main_vpc.cidr_block}", "${data.aws_vpc.bl_public_main_vpc.cidr_block}"]
   }
 
   egress {
     protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 1024
+    to_port     = 65535
+    cidr_blocks = ["${data.aws_vpc.bl_private_main_vpc.cidr_block}", "${data.aws_vpc.bl_public_main_vpc.cidr_block}"]
   }
 }

@@ -4,6 +4,10 @@ data "aws_vpc" "bl_private_vpc" {
   id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
 }
 
+data "aws_vpc" "bl_public_vpc" {
+  id = "${data.terraform_remote_state.bl_vpc_config.public_vpc_id}"
+}
+
 data "aws_subnet_ids" "bl_private_subnets" {
   vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
 }
@@ -28,16 +32,16 @@ resource "aws_security_group" "bl_vault_ecs_private_alb_sg" {
 
   ingress {
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${list(data.aws_vpc.bl_private_vpc.cidr_block, data.aws_vpc.bl_public_vpc.cidr_block)}"]
     from_port   = 8200
     to_port     = 8200
   }
 
   egress {
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 0
-    to_port     = 65525
+    cidr_blocks = ["${list(data.aws_vpc.bl_private_vpc.cidr_block, data.aws_vpc.bl_public_vpc.cidr_block)}"]
+    from_port   = 1024
+    to_port     = 65535
   }
 
   tags {

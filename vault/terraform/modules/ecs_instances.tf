@@ -62,14 +62,7 @@ resource "aws_security_group" "bl_ecs_instances_sg" {
 
   vpc_id = "${data.aws_vpc.bl_private_vpc.id}"
 
-  # TODO: remove this and replace with a bastion host for SSHing into and PROXY
-  ingress {
-      from_port = 0
-      to_port = 0
-      protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-
+  # Allow access to proxy
   ingress {
       from_port = 0
       to_port = 0
@@ -81,6 +74,21 @@ resource "aws_security_group" "bl_ecs_instances_sg" {
       from_port = 0
       to_port = 0
       protocol = "-1"
-      cidr_blocks = ["0.0.0.0/0"]
+      security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
+  }
+
+  # Allow ALB access
+  ingress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
+  }
+
+  egress {
+      from_port = 0
+      to_port = 0
+      protocol = "-1"
+      security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
   }
 }

@@ -17,4 +17,9 @@ terraform apply -auto-approve
 
 cd $BL_PATH
 
+cd aurora/terraform/instances/dev-eu-west-1-sandbox/
+terraform apply -auto-approve
+
+cd $BL_PATH
+
 echo "Done!"
