@@ -65,7 +65,7 @@ resource "aws_security_group" "bl_rds_sg" {
   }
 
   egress {
-    protocol    = "-1"
+    protocol    = "tcp"
     from_port   = 1024
     to_port     = 65535
     cidr_blocks = ["${data.aws_vpc.bl_private_main_vpc.cidr_block}", "${data.aws_vpc.bl_public_main_vpc.cidr_block}"]

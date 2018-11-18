@@ -9,6 +9,5 @@ resource "aws_secretsmanager_secret_version" "bl_aurora_password_secret" {
 
 resource "random_string" "bl_aurora_password_generator" {
   length = 32
-  special = true
-  override_special = "£%^*()@~{}[]<>,."
+  special = false
 }

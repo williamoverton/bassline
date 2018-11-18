@@ -55,6 +55,17 @@ resource "aws_autoscaling_group" "bl_ecs_instances_autoscaling" {
   launch_configuration = "${aws_launch_configuration.bl_ecs_instances_launch_config.name}"
   
   vpc_zone_identifier = ["${data.aws_subnet_ids.bl_private_subnets.ids}"]
+
+  tags {
+    key = "Name"
+    value = "${aws_ecs_cluster.bl_vault_ecs_cluster.name}"
+    propagate_at_launch = true
+  }
+}
+
+# get proxy lb
+data "aws_lb" "bl_proxy_lb" {
+  arn = "${data.terraform_remote_state.bl_proxy_config.load_balancer_id}"
 }
 
 resource "aws_security_group" "bl_ecs_instances_sg" {
@@ -64,17 +75,17 @@ resource "aws_security_group" "bl_ecs_instances_sg" {
 
   # Allow access to proxy
   ingress {
-      from_port = 0
-      to_port = 0
+      from_port = 1024
+      to_port = 65535
       protocol = "-1"
-      security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
+      security_groups = ["${data.aws_lb.bl_proxy_lb.security_groups}"]
   }
 
   egress {
-      from_port = 0
-      to_port = 0
+      from_port = "${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+      to_port = "${data.terraform_remote_state.bl_proxy_config.proxy_port}"
       protocol = "-1"
-      security_groups = ["${aws_security_group.bl_vault_ecs_private_alb_sg.id}"]
+      security_groups = ["${data.aws_lb.bl_proxy_lb.security_groups}"]
   }
 
   # Allow ALB access
