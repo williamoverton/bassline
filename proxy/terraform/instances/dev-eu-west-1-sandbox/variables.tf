@@ -7,3 +7,5 @@ variable "memory" {}
 
 variable "domain" {}
 variable "hosted_zone" {}
+
+variable "alarms_email" {}

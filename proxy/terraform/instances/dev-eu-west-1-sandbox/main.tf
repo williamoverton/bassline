@@ -18,4 +18,6 @@ module "bl_proxy" {
 
   domain="${var.domain}"
   hosted_zone="${var.hosted_zone}"
+
+  alarms_email      = "${var.alarms_email}"
 }
