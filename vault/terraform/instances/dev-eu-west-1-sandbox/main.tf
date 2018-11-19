@@ -15,4 +15,5 @@ module "bl_vault" {
   cpu               = "${var.cpu}"
   memory            = "${var.memory}"
   ecs_instance_type = "${var.ecs_instance_type}"
+  alarms_email      = "${var.alarms_email}"
 }

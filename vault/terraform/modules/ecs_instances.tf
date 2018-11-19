@@ -73,19 +73,19 @@ resource "aws_security_group" "bl_ecs_instances_sg" {
 
   vpc_id = "${data.aws_vpc.bl_private_vpc.id}"
 
-  # Allow access to proxy
+  # Allow access to proxy (needs more better)
   ingress {
       from_port = 1024
       to_port = 65535
-      protocol = "-1"
-      security_groups = ["${data.aws_lb.bl_proxy_lb.security_groups}"]
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]#["${data.aws_lb.bl_proxy_lb.security_groups}"]
   }
 
   egress {
-      from_port = "${data.terraform_remote_state.bl_proxy_config.proxy_port}"
-      to_port = "${data.terraform_remote_state.bl_proxy_config.proxy_port}"
-      protocol = "-1"
-      security_groups = ["${data.aws_lb.bl_proxy_lb.security_groups}"]
+      from_port = 0#"${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+      to_port = 65535#"${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]#["${data.aws_lb.bl_proxy_lb.security_groups}"]
   }
 
   # Allow ALB access
