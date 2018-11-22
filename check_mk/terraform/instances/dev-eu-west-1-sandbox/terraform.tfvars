@@ -1,0 +1,7 @@
+aws_region="eu-west-2"
+namespace="sandbox"
+stack="dev"
+cpu="256"
+memory="512"
+ecs_instance_type="t3.micro"
+alarms_email="william@overton-it-services.com"
