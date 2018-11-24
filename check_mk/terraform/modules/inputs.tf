@@ -6,7 +6,7 @@ variable "memory" {}
 variable "ecs_instance_type" {}
 
 variable "app_name" {
-  default = "check_mk"
+  default = "checkmk"
 }
 
 variable "autoscale_min" {

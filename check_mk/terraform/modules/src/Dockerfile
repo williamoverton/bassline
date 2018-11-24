@@ -18,7 +18,7 @@ ENV MAILHUB=${MAILHUB}
 
 # Install deps
 RUN apt-get update
-RUN apt-get install -y openssh-client samba-client ssmtp wget cron
+RUN apt-get install -y openssh-client samba-client ssmtp wget cron xinetd
 
 # retrieve and install the check mk binaries and its dependencies
 WORKDIR /tmp

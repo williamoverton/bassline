@@ -51,7 +51,7 @@ resource "aws_ecs_service" "bl_ecs_service" {
   name            = "bl-${var.app_name}-ecs-service-${var.stack}-${var.namespace}"
   cluster         = "${aws_ecs_cluster.bl_ecs_cluster.id}"
   task_definition = "${aws_ecs_task_definition.app.arn}"
-  desired_count   = "3"
+  desired_count   = "${var.autoscale_max}"
   launch_type     = "EC2"
 
   network_configuration {

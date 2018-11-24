@@ -14,19 +14,19 @@ data "aws_subnet_ids" "bl_private_subnets" {
 
 # Make Private ALB
 resource "aws_alb" "bl_ecs_private_load_balancer" {
-    name                = "bl-${var.app_name}-private-alb-${var.stack}-${var.namespace}"
+    name                = "bl-${var.app_name}-alb-${var.stack}-${var.namespace}"
     security_groups     = ["${aws_security_group.bl_ecs_private_alb_sg.id}"]
     subnets             = ["${data.aws_subnet_ids.bl_private_subnets.ids}"]
 
     internal            = true
 
     tags {
-      Name = "bl-${var.app_name}-private-alb-${var.stack}-${var.namespace}"
+      Name = "bl-${var.app_name}-alb-${var.stack}-${var.namespace}"
     }
 }
 
 resource "aws_security_group" "bl_ecs_private_alb_sg" {
-  name        = "bl-${var.app_name}-alb-private-sg-${var.stack}-${var.namespace}"
+  name        = "bl-${var.app_name}-alb-sg-${var.stack}-${var.namespace}"
   description = "Allow traffic to the ALB"
   vpc_id      = "${data.aws_vpc.bl_private_vpc.id}"
 
@@ -68,7 +68,7 @@ resource "aws_alb_target_group" "bl_ecs_target_group" {
     }
 
     tags {
-      Name = "bl-${var.app_name}-private-tg-${var.stack}-${var.namespace}"
+      Name = "bl-${var.app_name}-tg-${var.stack}-${var.namespace}"
     }
 }
 
