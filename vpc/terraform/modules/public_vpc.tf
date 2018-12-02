@@ -1,19 +1,3 @@
-# DEBUG PLZ
-
-resource "aws_instance" "debug_test_1" {
-  ami           = "ami-017b0e29fac27906b"
-  instance_type = "t2.micro"
-
-  subnet_id = "${aws_subnet.bl_public_main_subnet.0.id}"
-
-  key_name = "biff"
-
-  tags {
-    Name = "DEBUG PUBLIC"
-  }
-}
-
-# K STOP NOW  
 
 # Make VPC
 resource "aws_vpc" "bl_public_main_vpc" {
