@@ -12,7 +12,7 @@ locals {
   userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster.demo.certificate_authority.0.data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.bl_eks_cluster.endpoint}' --b64-cluster-ca '${aws_eks_cluster.bl_eks_cluster.certificate_authority.0.data}' '${aws_eks_cluster.bl_eks_cluster.name}'
 USERDATA
 }
 

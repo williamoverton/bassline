@@ -1,5 +1,5 @@
 data "aws_vpc" "bl_vpc" {
-  vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+  id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
 }
 
 data "aws_subnet_ids" "bl_private_subnets" {
