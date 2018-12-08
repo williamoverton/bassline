@@ -5,9 +5,11 @@
 
 ## What's Included?
 - VPC creation.
+- Bations for secure access
 - Squid Proxy for outbound connections
 - Vault cluster for secure secret storage & more
 - Aurora Mysql Database in secure vpc
+- Elasticsearch service for log/analytic storage
 
 ## How do I setup terraform?
 - Either create an S3 bucket for terraform state

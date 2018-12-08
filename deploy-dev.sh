@@ -7,6 +7,11 @@ terraform apply -auto-approve
 
 cd $BL_PATH
 
+cd bastion/terraform/instances/dev-eu-west-1-sandbox/
+terraform apply -auto-approve
+
+cd $BL_PATH
+
 cd proxy/terraform/instances/dev-eu-west-1-sandbox/
 terraform apply -auto-approve
 

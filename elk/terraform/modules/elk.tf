@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
-data "aws_subnet_ids" "bl_private_subnets" {
-  vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+data "aws_subnet_ids" "bl_public_subnets" {
+  vpc_id = "${data.terraform_remote_state.bl_vpc_config.public_vpc_id}"
 }
 
 resource "aws_iam_service_linked_role" "bl_es_linked_role" {
