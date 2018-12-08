@@ -136,7 +136,7 @@ data "aws_prefix_list" "bl_private_vpc_endpoint_dynamodb_prefix_list" {
 resource "aws_network_acl_rule" "bl_private_nacl_private_s3_out" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
-  count          = 3
+  count          = 2
 
   network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
   rule_number    = "40${count.index}"
@@ -151,7 +151,7 @@ resource "aws_network_acl_rule" "bl_private_nacl_private_s3_out" {
 resource "aws_network_acl_rule" "bl_private_nacl_private_s3_in" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_s3_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
-  count          = 3
+  count          = 2
 
   network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
   rule_number    = "40${count.index}"
@@ -166,7 +166,7 @@ resource "aws_network_acl_rule" "bl_private_nacl_private_s3_in" {
 resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb_in" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
-  count          = 1
+  count          = 3
 
   network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
   rule_number    = "50${count.index}"
@@ -181,7 +181,7 @@ resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb_in" {
 resource "aws_network_acl_rule" "bl_private_nacl_private_dynamodb_out" {
   # count = "${length(data.aws_prefix_list.bl_private_vpc_endpoint_dynamodb_prefix_list.cidr_blocks)}"
   #TODO: Fix count: https://github.com/hashicorp/terraform/issues/10857
-  count          = 1
+  count          = 3
 
   network_acl_id = "${aws_network_acl.bl_private_main_nacl.id}"
   rule_number    = "50${count.index}"
