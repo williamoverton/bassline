@@ -8,9 +8,7 @@ terraform {
 
 module "bl_eks" {
   source  = "../../modules"
-
-  state_region = "${var.state_region}"
-
+  
   aws_region = "${var.aws_region}"
   namespace = "${var.namespace}"
   stack = "${var.stack}"

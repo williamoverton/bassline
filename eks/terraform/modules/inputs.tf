@@ -1,5 +1,3 @@
-variable "state_region" {} // because eks is not available london yet
-
 variable "aws_region" {}
 variable "stack" {}
 variable "namespace" {}
@@ -14,7 +12,7 @@ data "terraform_remote_state" "bl_vpc_config" {
   config {
     bucket = "bl-terrafrom-remote-state"
     key    = "bl/vpc"
-    region = "${var.state_region}"
+    region = "${var.aws_region}"
   }
 }
 
