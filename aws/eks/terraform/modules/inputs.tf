@@ -16,3 +16,11 @@ data "terraform_remote_state" "bl_vpc_config" {
   }
 }
 
+data "terraform_remote_state" "bl_proxy_config" {
+  backend = "s3"
+  config {
+    bucket = "bl-terrafrom-remote-state"
+    key    = "bl/proxy"
+    region = "${var.aws_region}"
+  }
+}

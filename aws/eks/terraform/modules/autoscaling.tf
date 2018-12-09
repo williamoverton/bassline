@@ -12,6 +12,10 @@ locals {
   userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
+export HTTPS_PROXY="http://${data.terraform_remote_state.bl_proxy_config.proxy_dns_address}:${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+export HTTPS_PROXY="http://${data.terraform_remote_state.bl_proxy_config.proxy_dns_address}:${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+export https_proxy="http://${data.terraform_remote_state.bl_proxy_config.proxy_dns_address}:${data.terraform_remote_state.bl_proxy_config.proxy_port}"
+export http_proxy="http://${data.terraform_remote_state.bl_proxy_config.proxy_dns_address}:${data.terraform_remote_state.bl_proxy_config.proxy_port}"
 /etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.bl_eks_cluster.endpoint}' --b64-cluster-ca '${aws_eks_cluster.bl_eks_cluster.certificate_authority.0.data}' '${aws_eks_cluster.bl_eks_cluster.name}'
 USERDATA
 }
@@ -36,7 +40,7 @@ resource "aws_autoscaling_group" "bl_eks_autoscaling_group" {
   max_size             = 2
   min_size             = 1
   name                 = "bl-${var.app_name}-${var.stack}-${var.namespace}-ag"
-  vpc_zone_identifier  = ["${data.aws_vpc.bl_vpc.id}"]
+  vpc_zone_identifier  = ["${data.aws_subnet_ids.bl_private_subnets.ids}"]
 
   tag {
     key                 = "Name"

@@ -1,6 +1,6 @@
 resource "aws_security_group" "bl_eks_worker_node" {
   name        = "bl-${var.app_name}-${var.stack}-${var.namespace}-worker-sg"
-  vpc_id      = "${data.aws_vpc.bl_vpc.id}"
+  vpc_id      = "${data.aws_vpc.bl_private_vpc.id}"
 
   egress {
     from_port   = 0
@@ -10,7 +10,7 @@ resource "aws_security_group" "bl_eks_worker_node" {
   }
   
   tags {
-    Name = "bl-${var.app_name}-${var.stack}-${var.namespace}"
+    Name = "bl-${var.app_name}-${var.stack}-${var.namespace}-worker-sg"
   }
 }
 
