@@ -34,9 +34,7 @@ resource "aws_launch_configuration" "bl_ecs_instances_launch_config" {
 
   security_groups = ["${aws_security_group.bl_ecs_instances_sg.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.bl_ecs_instances_instance_profile.name}"
-
-  key_name = "biff"
-
+  
   associate_public_ip_address = false
 
   user_data = "${data.template_file.bl_ecs_user_data.rendered}"

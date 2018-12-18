@@ -15,4 +15,7 @@ module "bl_bastion" {
   
   instance_type = "${var.instance_type}"
   ssh_public_key_filename = "${var.ssh_public_key_filename}"
+
+  hosted_zone_id="${var.hosted_zone_id}"
+  domain_name="${var.domain_name}"
 }

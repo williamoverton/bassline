@@ -33,8 +33,8 @@ resource "aws_security_group" "bl_ecs_private_alb_sg" {
   ingress {
     protocol    = "tcp"
     cidr_blocks = ["${list(data.aws_vpc.bl_private_vpc.cidr_block, data.aws_vpc.bl_public_vpc.cidr_block)}"]
-    from_port   = 8200
-    to_port     = 8200
+    from_port   = 5000
+    to_port     = 5000
   }
 
   egress {
@@ -51,7 +51,7 @@ resource "aws_security_group" "bl_ecs_private_alb_sg" {
 
 resource "aws_alb_target_group" "bl_ecs_target_group" {
     name        = "bl-${var.app_name}-tg-${var.stack}-${var.namespace}"
-    port        = "8200"
+    port        = "5000"
     protocol    = "HTTP"
     vpc_id      = "${data.aws_vpc.bl_private_vpc.id}"
     target_type = "ip"
@@ -61,7 +61,7 @@ resource "aws_alb_target_group" "bl_ecs_target_group" {
         unhealthy_threshold = "2"
         interval            = "30"
         matcher             = "200"
-        path                = "/v1/sys/seal-status"
+        path                = "/"
         port                = "traffic-port"
         protocol            = "HTTP"
         timeout             = "5"
@@ -74,7 +74,7 @@ resource "aws_alb_target_group" "bl_ecs_target_group" {
 
 resource "aws_alb_listener" "bl_private_alb_listener" {
     load_balancer_arn = "${aws_alb.bl_ecs_private_load_balancer.arn}"
-    port              = "8200"
+    port              = "5000"
     protocol          = "HTTP"
 
     default_action {

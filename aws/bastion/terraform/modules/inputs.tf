@@ -16,6 +16,9 @@ variable "app_port" {
   default = "22"
 }
 
+variable "hosted_zone_id" {}
+variable "domain_name" {}
+
 data "terraform_remote_state" "bl_vpc_config" {
   backend = "s3"
   config {
