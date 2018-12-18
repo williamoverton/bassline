@@ -49,8 +49,22 @@ resource "aws_security_group" "bl_private_bastion_sg" {
   }
 }
 
+data "aws_ami" "bastion_ami" {
+  most_recent      = true
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+}
+
 resource "aws_instance" "bl_bastion_private_instance" {
-  ami           = "ami-017b0e29fac27906b"
+  ami           = "${data.aws_ami.bastion_ami.id}"
   instance_type = "${var.instance_type}"
 
   subnet_id = "${data.aws_subnet_ids.bl_private_subnets.ids[0]}"
@@ -64,7 +78,7 @@ resource "aws_instance" "bl_bastion_private_instance" {
 }
 
 resource "aws_instance" "bl_bastion_public_instance" {
-  ami           = "ami-017b0e29fac27906b"
+  ami           = "${data.aws_ami.bastion_ami.id}"
   instance_type = "${var.instance_type}"
 
   subnet_id = "${data.aws_subnet_ids.bl_public_subnets.ids[0]}"

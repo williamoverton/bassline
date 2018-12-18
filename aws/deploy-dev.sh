@@ -1,4 +1,4 @@
-echo "Deplying everything in dev!"
+echo "Deploying everything in dev!"
 
 BL_PATH=`pwd`
 
