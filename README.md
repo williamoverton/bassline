@@ -1,3 +1,5 @@
+![alt text](https://github.com/williamoverton/bassline/raw/master/Bassline.png)
+
 # Bassline
 ##### A baseline project for deploying all the things
 
