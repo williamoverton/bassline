@@ -8,7 +8,7 @@ env
 
 sleep 3
 
-# check if need init
+# check if need init (possible race condition here but containers dont tend to start at the exact same time)
 if [[ $(curl -s http://localhost:8200/v1/sys/seal-status | jq -r ".initialized") = "false" ]]
 then
 	VAULT_ADDR="http://localhost:8200" vault operator init --format=json > /tmp/vault-init.json
