@@ -1,5 +1,3 @@
-#cloud-boothook
-# Configure Yum, the Docker daemon, and the ECS agent to use an HTTP proxy
 
 # Specify proxy host, port number, and ECS cluster name to use
 PROXY_HOST="${proxy_dns}"
@@ -8,11 +6,6 @@ CLUSTER_NAME="${ecs_cluster_name}"
 
 # Set Yum HTTP proxy
 echo "proxy=http://$PROXY_HOST:$PROXY_PORT" >> /etc/yum.conf
-
-# Set Docker HTTP proxy
-# echo "export HTTP_PROXY=http://$PROXY_HOST:$PROXY_PORT/" >> /etc/sysconfig/docker
-# echo "export NO_PROXY=localhost,169.254.169.254,/var/run/docker.sock,10.0.0.0/8" >> /etc/sysconfig/docker
-
 
 # Set ECS agent HTTP proxy
 echo "ECS_CLUSTER=$CLUSTER_NAME" >> /etc/ecs/ecs.config
