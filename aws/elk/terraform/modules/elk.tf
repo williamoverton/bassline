@@ -53,7 +53,7 @@ CONFIG
     automated_snapshot_start_hour = 23
   }
 
-  tags {
+  tags = {
     Name = "bl-elk-${var.stack}-${var.namespace}"
   }
 

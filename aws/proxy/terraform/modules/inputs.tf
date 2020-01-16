@@ -142,7 +142,7 @@ variable "alert_memory_utilization_low_ok_actions" {
 
 data "terraform_remote_state" "bl_vpc_config" {
   backend = "s3"
-  config {
+  config = {
     bucket = "bl-terrafrom-remote-state"
     key    = "bl/vpc"
     region = "eu-west-1"

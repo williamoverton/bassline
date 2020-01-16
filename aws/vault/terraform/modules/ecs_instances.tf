@@ -56,7 +56,7 @@ resource "aws_autoscaling_group" "bl_ecs_instances_autoscaling" {
   
   vpc_zone_identifier = ["${data.aws_subnet_ids.bl_private_subnets.ids}"]
 
-  tags {
+  tags = {
     key = "Name"
     value = "${aws_ecs_cluster.bl_vault_ecs_cluster.name}"
     propagate_at_launch = true

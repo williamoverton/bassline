@@ -22,7 +22,7 @@ resource "aws_elasticache_replication_group" "bl_redis_cluster" {
     num_node_groups         = "${var.app_node_groups}"
   }
 
-  tags {
+  tags = {
     key = "Name"
     value = "bl-${var.app_name}-cluster-${var.stack}-${var.namespace}"
   }

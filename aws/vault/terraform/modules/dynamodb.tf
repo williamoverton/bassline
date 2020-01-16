@@ -20,7 +20,7 @@ resource "aws_dynamodb_table" "bl_vault_dynamodb_table" {
     enabled        = false
   }
 
-  tags {
+  tags = {
     Name        = "bl-${var.app_name}-${var.stack}-${var.namespace}"
   }
 }

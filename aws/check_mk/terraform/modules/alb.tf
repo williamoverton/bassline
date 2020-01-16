@@ -20,7 +20,7 @@ resource "aws_alb" "bl_ecs_private_load_balancer" {
 
     internal            = true
 
-    tags {
+    tags = {
       Name = "bl-${var.app_name}-alb-${var.stack}-${var.namespace}"
     }
 }
@@ -44,7 +44,7 @@ resource "aws_security_group" "bl_ecs_private_alb_sg" {
     to_port     = 65535
   }
 
-  tags {
+  tags = {
     Name = "bl-${var.app_name}-alb-sg-${var.stack}-${var.namespace}"
   }
 }
@@ -67,7 +67,7 @@ resource "aws_alb_target_group" "bl_ecs_target_group" {
         timeout             = "5"
     }
 
-    tags {
+    tags = {
       Name = "bl-${var.app_name}-tg-${var.stack}-${var.namespace}"
     }
 }

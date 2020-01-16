@@ -1,9 +1,9 @@
 data "aws_route53_zone" "bl_private_vpc_dns_zone" {
-  zone_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_dns_id}"
+  zone_id = "${data.terraform_remote_state.bl_vpc_config.outputs.private_vpc_dns_id}"
 }
 
 data "aws_route53_zone" "bl_public_vpc_dns_zone" {
-  zone_id = "${data.terraform_remote_state.bl_vpc_config.public_vpc_dns_id}"
+  zone_id = "${data.terraform_remote_state.bl_vpc_config.outputs.public_vpc_dns_id}"
 }
 
 resource "aws_route53_record" "bl_internal_public_vpc_dns" {

@@ -6,7 +6,7 @@ resource "aws_vpc" "bl_public_main_vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
 
-  tags {
+  tags = {
     Name = "bl-public-main-vpc"
   }
 }
@@ -23,7 +23,7 @@ resource "aws_subnet" "bl_public_main_subnet" {
 
   map_public_ip_on_launch = true
 
-  tags {
+  tags = {
     Name = "bl-public-main-vpc-subnet-${data.aws_availability_zones.bl_public_az.names[count.index]}"
   }
 }
@@ -32,7 +32,7 @@ resource "aws_subnet" "bl_public_main_subnet" {
 resource "aws_internet_gateway" "bl_public_main_gw" {
   vpc_id = "${aws_vpc.bl_public_main_vpc.id}"
 
-  tags {
+  tags = {
     Name = "bl-public-main-internet-gateway"
   }
 }
@@ -50,7 +50,7 @@ resource "aws_route_table" "bl_public_main_route_table" {
     gateway_id  = "${aws_internet_gateway.bl_public_main_gw.id}"
   }
 
-  tags {
+  tags = {
     Name = "bl-public-main-route-table"
   }
 }
@@ -75,7 +75,7 @@ resource "aws_vpc_peering_connection" "bl_main_vpc_peering" {
     allow_remote_vpc_dns_resolution = true
   }
 
-  tags {
+  tags = {
     Name = "bl-main-vpc-peering"
   }
 }
@@ -84,7 +84,7 @@ resource "aws_vpc_peering_connection" "bl_main_vpc_peering" {
 resource "aws_network_acl" "bl_public_main_nacl" {
   vpc_id       = "${aws_vpc.bl_public_main_vpc.id}"
 
-  subnet_ids   = ["${aws_subnet.bl_public_main_subnet.*.id}"]
+  subnet_ids   = flatten(aws_subnet.bl_public_main_subnet.*.id)
 
   # Allow all in and out
   egress {
@@ -105,7 +105,7 @@ resource "aws_network_acl" "bl_public_main_nacl" {
     to_port    = 0
   }
 
-  tags {
+  tags = {
     Name = "bl-public-main-nacl"
   }
 }

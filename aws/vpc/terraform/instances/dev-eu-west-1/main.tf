@@ -7,7 +7,8 @@ terraform {
 }
 
 module "bl_vpc" {
-  source  = "../../modules"
+  source = "../../modules"
 
-  aws_region = "${var.aws_region}"
+  aws_region = var.aws_region
 }
+

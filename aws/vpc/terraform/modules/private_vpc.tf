@@ -5,7 +5,7 @@ resource "aws_vpc" "bl_private_main_vpc" {
 
   enable_dns_hostnames = true
 
-  tags {
+  tags = {
     Name = "bl-private-main-vpc"
   }
 }
@@ -20,7 +20,7 @@ resource "aws_subnet" "bl_private_main_vpc_subnet" {
   cidr_block        = "${cidrsubnet(aws_vpc.bl_private_main_vpc.cidr_block, 8, length(data.aws_availability_zones.bl_private_az.names) + count.index)}"
   availability_zone = "${data.aws_availability_zones.bl_private_az.names[count.index]}"
 
-  tags {
+  tags = {
     Name = "bl-private-main-vpc-subnet-${data.aws_availability_zones.bl_private_az.names[count.index]}"
   }
 }
@@ -34,7 +34,7 @@ resource "aws_route_table" "bl_private_main_route_table" {
     vpc_peering_connection_id = "${aws_vpc_peering_connection.bl_main_vpc_peering.id}"
   }
 
-  tags {
+  tags = {
     Name = "bl-private-main-route-table"
   }
 
@@ -51,7 +51,7 @@ resource "aws_route_table_association" "bl_private_route_table_association" {
 resource "aws_network_acl" "bl_private_main_nacl" {
   vpc_id       = "${aws_vpc.bl_private_main_vpc.id}"
 
-  subnet_ids   = ["${aws_subnet.bl_private_main_vpc_subnet.*.id}"]
+  subnet_ids   = flatten(aws_subnet.bl_private_main_vpc_subnet.*.id)
 
   # Output to public vpc
   egress {
@@ -73,7 +73,7 @@ resource "aws_network_acl" "bl_private_main_nacl" {
     to_port    = 65525
   }
 
-  tags {
+  tags = {
     Name = "bl-private-main-nacl"
   }
 }
@@ -92,7 +92,7 @@ resource "aws_vpc_endpoint" "bl_private_vpc_endpoint_dynamodb" {
 }
 
 resource "aws_vpc_endpoint" "bl_private_vpc_endpoint_ec2" {
-  subnet_ids          = ["${aws_subnet.bl_private_main_vpc_subnet.*.id}"]
+  subnet_ids          = flatten(aws_subnet.bl_private_main_vpc_subnet.*.id)
   vpc_id              = "${aws_vpc.bl_private_main_vpc.id}"
   service_name        = "com.amazonaws.${var.aws_region}.ec2"
   vpc_endpoint_type   = "Interface"
@@ -119,7 +119,7 @@ resource "aws_security_group" "bl_private_vpc_endpoint_ec2_sg" {
     to_port     = 65525
   }
 
-  tags {
+  tags = {
     Name = "bl-private-vpc_endpoint-ec2-sg"
   }
 }

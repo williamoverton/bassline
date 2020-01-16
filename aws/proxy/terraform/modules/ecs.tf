@@ -1,5 +1,5 @@
 data "aws_vpc" "bl_private_vpc" {
-  id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+  id = "${data.terraform_remote_state.bl_vpc_config.outputs.private_vpc_id}"
 }
 
 resource "aws_ecs_cluster" "bl_ecs_cluster" {
@@ -45,7 +45,7 @@ resource "aws_ecs_service" "bl_ecs_service" {
 
   network_configuration {
     security_groups  = ["${aws_security_group.bl_ecs_task_sg.id}"]
-    subnets          = ["${data.aws_subnet_ids.bl_public_subnets.ids}"]
+    subnets          = flatten(data.aws_subnet_ids.bl_public_subnets.ids)
     assign_public_ip = true
   }
 

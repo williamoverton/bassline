@@ -9,7 +9,7 @@ resource "aws_security_group" "bl_eks_worker_node" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   
-  tags {
+  tags = {
     Name = "bl-${var.app_name}-${var.stack}-${var.namespace}-worker-sg"
   }
 }

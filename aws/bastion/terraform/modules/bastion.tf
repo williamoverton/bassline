@@ -1,9 +1,9 @@
 data "aws_subnet_ids" "bl_private_subnets" {
-  vpc_id = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+  vpc_id = "${data.terraform_remote_state.bl_vpc_config.outputs.private_vpc_id}"
 }
 
 data "aws_subnet_ids" "bl_public_subnets" {
-  vpc_id = "${data.terraform_remote_state.bl_vpc_config.public_vpc_id}"
+  vpc_id = "${data.terraform_remote_state.bl_vpc_config.outputs.public_vpc_id}"
 }
 
 resource "aws_key_pair" "bl_ssh_key" {
@@ -13,7 +13,7 @@ resource "aws_key_pair" "bl_ssh_key" {
 
 resource "aws_security_group" "bl_public_bastion_sg" {
   name        = "bl-${var.app_name}-public-bastion-sg-${var.stack}-${var.namespace}"
-  vpc_id      = "${data.terraform_remote_state.bl_vpc_config.public_vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.bl_vpc_config.outputs.public_vpc_id}"
 
   ingress {
     protocol        = "tcp"
@@ -32,7 +32,7 @@ resource "aws_security_group" "bl_public_bastion_sg" {
 
 resource "aws_security_group" "bl_private_bastion_sg" {
   name        = "bl-${var.app_name}-private-bastion-sg-${var.stack}-${var.namespace}"
-  vpc_id      = "${data.terraform_remote_state.bl_vpc_config.private_vpc_id}"
+  vpc_id      = "${data.terraform_remote_state.bl_vpc_config.outputs.private_vpc_id}"
 
   ingress {
     protocol        = "tcp"
@@ -50,29 +50,26 @@ resource "aws_security_group" "bl_private_bastion_sg" {
 }
 
 data "aws_ami" "bastion_ami" {
-  most_recent      = true
+  most_recent = true
 
   filter {
     name   = "name"
     values = ["amzn2-ami-hvm-2.0.????????-x86_64-gp2"]
   }
 
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
+  owners = ["amazon"]
 }
 
 resource "aws_instance" "bl_bastion_private_instance" {
   ami           = "${data.aws_ami.bastion_ami.id}"
   instance_type = "${var.instance_type}"
 
-  subnet_id = "${data.aws_subnet_ids.bl_private_subnets.ids[0]}"
+  subnet_id = flatten(data.aws_subnet_ids.bl_private_subnets.ids)[0]
   vpc_security_group_ids = ["${aws_security_group.bl_private_bastion_sg.id}"]
 
   key_name = "${aws_key_pair.bl_ssh_key.key_name}"
 
-  tags {
+  tags = {
     Name = "bl-${var.app_name}-private-bastion-sg-${var.stack}-${var.namespace}"
   }
 }
@@ -81,12 +78,12 @@ resource "aws_instance" "bl_bastion_public_instance" {
   ami           = "${data.aws_ami.bastion_ami.id}"
   instance_type = "${var.instance_type}"
 
-  subnet_id = "${data.aws_subnet_ids.bl_public_subnets.ids[0]}"
+  subnet_id = flatten(data.aws_subnet_ids.bl_public_subnets.ids)[0]
   vpc_security_group_ids = ["${aws_security_group.bl_public_bastion_sg.id}"]
 
   key_name = "${aws_key_pair.bl_ssh_key.key_name}"
 
-  tags {
+  tags = {
     Name = "bl-${var.app_name}-public-bastion-sg-${var.stack}-${var.namespace}"
   }
 }
